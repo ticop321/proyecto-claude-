@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo Circadiano - App Funcional</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: white;
+            color: #1e3c72;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .action-btn {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            padding: 30px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateY(-5px);
+        }
+
+        .action-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .action-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-title {
+            font-size: 1.8em;
+            color: #1e3c72;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .records {
+            margin-top: 40px;
+        }
+
+        .record-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .record-date {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .record-content {
+            color: #555;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border-left: 4px solid #10b981;
+            display: none;
+            z-index: 2000;
+            animation: slideIn 0.3s;
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>🌙 Protocolo Circadiano Pro</h1>
+                <p>Gestión completa para trabajadores nocturnos</p>
+            </div>
+            <button class="btn" onclick="exportarDatos()">📥 Exportar Datos</button>
+        </header>
+
+        <div class="main-content">
+            <!-- Estadísticas -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-label">Horas de Sueño</div>
+                    <div class="stat-number" id="stat-sleep">7.5</div>
+                    <div class="stat-label">Promedio</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Adherencia</div>
+                    <div class="stat-number" id="stat-adherence">85%</div>
+                    <div class="stat-label">Suplementos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Ejercicio</div>
+                    <div class="stat-number" id="stat-exercise">4/5</div>
+                    <div class="stat-label">Días esta semana</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Registros</div>
+                    <div class="stat-number" id="stat-total">0</div>
+                    <div class="stat-label">Total guardados</div>
+                </div>
+            </div>
+
+            <!-- Acciones Rápidas -->
+            <h2>Acciones Rápidas</h2>
+            <div class="actions">
+                <div class="action-btn" onclick="abrirRegistroSueno()">
+                    <div class="action-icon">😴</div>
+                    <div class="action-title">Registrar Sueño</div>
+                </div>
+                <div class="action-btn" onclick="abrirRegistroSuplemento()">
+                    <div class="action-icon">💊</div>
+                    <div class="action-title">Suplementos</div>
+                </div>
+                <div class="action-btn" onclick="abrirRegistroEjercicio()">
+                    <div class="action-icon">🏃</div>
+                    <div class="action-title">Ejercicio</div>
+                </div>
+                <div class="action-btn" onclick="abrirRegistroSalud()">
+                    <div class="action-icon">🫀</div>
+                    <div class="action-title">Salud</div>
+                </div>
+            </div>
+
+            <!-- Registros Recientes -->
+            <h2>Registros Recientes</h2>
+            <div id="registros-lista" class="records">
+                <p style="color: #999; text-align: center; padding: 40px;">
+                    No hay registros aún. ¡Empieza a registrar tus actividades!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-titulo">Registro</h3>
+                <button class="close-btn" onclick="cerrarModal()">&times;</button>
+            </div>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Notificación -->
+    <div id="notification" class="notification">
+        <div id="notification-text"></div>
+    </div>
+
+    <script>
+        // ===== SISTEMA DE ALMACENAMIENTO =====
+        let registros = JSON.parse(localStorage.getItem('protocolo_registros') || '[]');
+
+        function guardarRegistro(tipo, datos) {
+            const registro = {
+                id: Date.now(),
+                tipo: tipo,
+                fecha: new Date().toISOString(),
+                datos: datos
+            };
+
+            registros.unshift(registro);
+            localStorage.setItem('protocolo_registros', JSON.stringify(registros));
+
+            actualizarEstadisticas();
+            mostrarRegistros();
+            mostrarNotificacion('✅ Registro guardado exitosamente');
+        }
+
+        // ===== MODAL =====
+        function abrirModal(titulo, contenido) {
+            document.getElementById('modal-titulo').textContent = titulo;
+            document.getElementById('modal-body').innerHTML = contenido;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // ===== REGISTROS =====
+        function abrirRegistroSueno() {
+            const html = `
+                <form onsubmit="guardarSueno(event)">
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" name="fecha" value="${new Date().toISOString().split('T')[0]}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora de dormir</label>
+                        <input type="time" name="dormir" value="08:30" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora de despertar</label>
+                        <input type="time" name="despertar" value="16:30" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Calidad del sueño (1-10)</label>
+                        <input type="range" name="calidad" min="1" max="10" value="7" oninput="this.nextElementSibling.textContent = this.value">
+                        <span style="font-size: 1.5em; font-weight: bold; color: #667eea;">7</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Notas</label>
+                        <textarea name="notas" placeholder="¿Cómo dormiste?"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            `;
+            abrirModal('😴 Registrar Sueño', html);
+        }
+
+        function guardarSueno(e) {
+            e.preventDefault();
+            const form = e.target;
+            const datos = {
+                fecha: form.fecha.value,
+                dormir: form.dormir.value,
+                despertar: form.despertar.value,
+                calidad: form.calidad.value,
+                notas: form.notas.value
+            };
+            guardarRegistro('sueño', datos);
+            cerrarModal();
+        }
+
+        function abrirRegistroSuplemento() {
+            const html = `
+                <form onsubmit="guardarSuplemento(event)">
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" name="fecha" value="${new Date().toISOString().split('T')[0]}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Suplementos tomados</label>
+                        <div style="margin: 10px 0;">
+                            <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;">
+                                <input type="checkbox" name="supp" value="Melatonina 1-3mg"> Melatonina 1-3mg
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;">
+                                <input type="checkbox" name="supp" value="Vitamina D3"> Vitamina D3 2000-4000 IU
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;">
+                                <input type="checkbox" name="supp" value="Magnesio"> Magnesio 200-400mg
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px; font-weight: normal;">
+                                <input type="checkbox" name="supp" value="Omega-3"> Omega-3 1-2g
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Notas</label>
+                        <textarea name="notas" placeholder="Observaciones"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            `;
+            abrirModal('💊 Registrar Suplementos', html);
+        }
+
+        function guardarSuplemento(e) {
+            e.preventDefault();
+            const form = e.target;
+            const checkedBoxes = form.querySelectorAll('input[name="supp"]:checked');
+            const suplementos = Array.from(checkedBoxes).map(cb => cb.value);
+
+            const datos = {
+                fecha: form.fecha.value,
+                suplementos: suplementos,
+                notas: form.notas.value
+            };
+            guardarRegistro('suplemento', datos);
+            cerrarModal();
+        }
+
+        function abrirRegistroEjercicio() {
+            const html = `
+                <form onsubmit="guardarEjercicio(event)">
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" name="fecha" value="${new Date().toISOString().split('T')[0]}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de ejercicio</label>
+                        <select name="tipo" required>
+                            <option value="cardio">Cardio</option>
+                            <option value="fuerza">Fuerza</option>
+                            <option value="flexibilidad">Flexibilidad</option>
+                            <option value="mixto">Mixto</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Duración (minutos)</label>
+                        <input type="number" name="duracion" min="1" value="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Intensidad</label>
+                        <select name="intensidad" required>
+                            <option value="baja">Baja</option>
+                            <option value="media" selected>Media</option>
+                            <option value="alta">Alta</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Notas</label>
+                        <textarea name="notas" placeholder="Detalles del ejercicio"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            `;
+            abrirModal('🏃 Registrar Ejercicio', html);
+        }
+
+        function guardarEjercicio(e) {
+            e.preventDefault();
+            const form = e.target;
+            const datos = {
+                fecha: form.fecha.value,
+                tipo: form.tipo.value,
+                duracion: form.duracion.value,
+                intensidad: form.intensidad.value,
+                notas: form.notas.value
+            };
+            guardarRegistro('ejercicio', datos);
+            cerrarModal();
+        }
+
+        function abrirRegistroSalud() {
+            const html = `
+                <form onsubmit="guardarSalud(event)">
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <input type="date" name="fecha" value="${new Date().toISOString().split('T')[0]}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Peso (kg)</label>
+                        <input type="number" step="0.1" name="peso">
+                    </div>
+                    <div class="form-group">
+                        <label>Presión Arterial (ej: 120/80)</label>
+                        <input type="text" name="presion" placeholder="120/80">
+                    </div>
+                    <div class="form-group">
+                        <label>Estado de ánimo (1-10)</label>
+                        <input type="range" name="animo" min="1" max="10" value="7" oninput="this.nextElementSibling.textContent = this.value">
+                        <span style="font-size: 1.5em; font-weight: bold; color: #667eea;">7</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Nivel de energía (1-10)</label>
+                        <input type="range" name="energia" min="1" max="10" value="7" oninput="this.nextElementSibling.textContent = this.value">
+                        <span style="font-size: 1.5em; font-weight: bold; color: #667eea;">7</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Notas y síntomas</label>
+                        <textarea name="notas" placeholder="Describe cómo te sientes"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            `;
+            abrirModal('🫀 Registrar Métricas de Salud', html);
+        }
+
+        function guardarSalud(e) {
+            e.preventDefault();
+            const form = e.target;
+            const datos = {
+                fecha: form.fecha.value,
+                peso: form.peso.value,
+                presion: form.presion.value,
+                animo: form.animo.value,
+                energia: form.energia.value,
+                notas: form.notas.value
+            };
+            guardarRegistro('salud', datos);
+            cerrarModal();
+        }
+
+        // ===== VISUALIZACIÓN =====
+        function mostrarRegistros() {
+            const container = document.getElementById('registros-lista');
+
+            if (registros.length === 0) {
+                container.innerHTML = '<p style="color: #999; text-align: center; padding: 40px;">No hay registros aún. ¡Empieza a registrar tus actividades!</p>';
+                return;
+            }
+
+            let html = '';
+            registros.slice(0, 10).forEach(reg => {
+                const fecha = new Date(reg.fecha).toLocaleString('es-ES');
+                const icono = {
+                    'sueño': '😴',
+                    'suplemento': '💊',
+                    'ejercicio': '🏃',
+                    'salud': '🫀'
+                }[reg.tipo] || '📝';
+
+                let detalles = '';
+                if (reg.tipo === 'sueño') {
+                    detalles = `Dormir: ${reg.datos.dormir} - Despertar: ${reg.datos.despertar} | Calidad: ${reg.datos.calidad}/10`;
+                } else if (reg.tipo === 'suplemento') {
+                    detalles = `Suplementos: ${reg.datos.suplementos.join(', ') || 'Ninguno'}`;
+                } else if (reg.tipo === 'ejercicio') {
+                    detalles = `${reg.datos.tipo} - ${reg.datos.duracion} min (${reg.datos.intensidad})`;
+                } else if (reg.tipo === 'salud') {
+                    detalles = `Ánimo: ${reg.datos.animo}/10 | Energía: ${reg.datos.energia}/10`;
+                }
+
+                html += `
+                    <div class="record-item">
+                        <div class="record-date">${icono} ${fecha}</div>
+                        <div class="record-content">${detalles}</div>
+                        ${reg.datos.notas ? `<div style="margin-top: 8px; font-style: italic; color: #777;">Nota: ${reg.datos.notas}</div>` : ''}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function actualizarEstadisticas() {
+            // Total de registros
+            document.getElementById('stat-total').textContent = registros.length;
+
+            // Calcular promedio de sueño
+            const registrosSueno = registros.filter(r => r.tipo === 'sueño');
+            if (registrosSueno.length > 0) {
+                const totalCalidad = registrosSueno.reduce((sum, r) => sum + parseInt(r.datos.calidad), 0);
+                const promedio = (totalCalidad / registrosSueno.length).toFixed(1);
+                document.getElementById('stat-sleep').textContent = promedio;
+            }
+
+            // Adherencia de suplementos
+            const registrosSupp = registros.filter(r => r.tipo === 'suplemento');
+            if (registrosSupp.length > 0) {
+                const conSupp = registrosSupp.filter(r => r.datos.suplementos.length > 0).length;
+                const adherencia = Math.round((conSupp / registrosSupp.length) * 100);
+                document.getElementById('stat-adherence').textContent = adherencia + '%';
+            }
+
+            // Ejercicio semanal
+            const haceUnaSemana = new Date();
+            haceUnaSemana.setDate(haceUnaSemana.getDate() - 7);
+            const ejercicioSemana = registros.filter(r =>
+                r.tipo === 'ejercicio' && new Date(r.fecha) >= haceUnaSemana
+            ).length;
+            document.getElementById('stat-exercise').textContent = `${Math.min(ejercicioSemana, 5)}/5`;
+        }
+
+        function mostrarNotificacion(texto) {
+            const notif = document.getElementById('notification');
+            document.getElementById('notification-text').textContent = texto;
+            notif.classList.add('show');
+
+            setTimeout(() => {
+                notif.classList.remove('show');
+            }, 3000);
+        }
+
+        // ===== EXPORTAR =====
+        function exportarDatos() {
+            const datos = {
+                fecha_exportacion: new Date().toISOString(),
+                total_registros: registros.length,
+                registros: registros
+            };
+
+            const blob = new Blob([JSON.stringify(datos, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `protocolo-circadiano-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            mostrarNotificacion('📥 Datos exportados exitosamente');
+        }
+
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', function() {
+            mostrarRegistros();
+            actualizarEstadisticas();
+            console.log('✅ App Protocolo Circadiano cargada correctamente');
+        });
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target.id === 'modal') {
+                cerrarModal();
+            }
+        });
+    </script>
+</body>
+</html>
