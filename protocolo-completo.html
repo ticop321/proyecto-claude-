@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo de Descanso Circadiano</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 20px 20px 0 0;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        section {
+            padding: 40px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        h2 {
+            color: #2a5298;
+            font-size: 2em;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        h3 {
+            color: #1e3c72;
+            font-size: 1.5em;
+            margin: 30px 0 20px 0;
+        }
+        h4 {
+            color: #2a5298;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .profile-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .info-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+        }
+        .info-card .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .info-card .value {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        .time-block {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .time-block.critical {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        .time-block.sleep {
+            background: #e7f3ff;
+            border-left-color: #0066cc;
+        }
+        .time-block.work {
+            background: #f0e6ff;
+            border-left-color: #764ba2;
+        }
+        .time {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #2a5298;
+            margin-bottom: 10px;
+            display: inline-block;
+            background: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        .activity ul {
+            margin: 15px 0 15px 20px;
+        }
+        .activity li {
+            margin: 8px 0;
+        }
+        .evidence {
+            margin-top: 15px;
+            padding: 12px;
+            background: #e8f4f8;
+            border-left: 3px solid #17a2b8;
+            border-radius: 5px;
+            font-size: 0.95em;
+            font-style: italic;
+        }
+        .warning {
+            margin-top: 15px;
+            padding: 12px;
+            background: #fff3cd;
+            border-left: 3px solid #ffc107;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .supplement-grid, .risk-grid, .monitoring-list, .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .supplement-card, .risk-card, .monitoring-item, .equipment-item {
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+        }
+        .supplement-card.essential {
+            background: #e7f3ff;
+            border-color: #0066cc;
+        }
+        .supplement-card.optional {
+            background: #f0f0f0;
+            border-color: #666;
+        }
+        .risk-card {
+            border-color: #dc3545;
+        }
+        .risk-card h4 {
+            color: #dc3545;
+        }
+        .monitoring-item {
+            background: #f8f9fa;
+            border-left: 4px solid #28a745;
+        }
+        .equipment-item.priority-high {
+            background: #ffe6e6;
+            border-color: #dc3545;
+        }
+        .equipment-item.priority-medium {
+            background: #fff8e6;
+            border-color: #ffc107;
+        }
+        .equipment-item.priority-low {
+            background: #e6f7ff;
+            border-color: #17a2b8;
+        }
+        .science-content {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+        }
+        .science-list {
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+        .science-list li {
+            margin: 15px 0;
+        }
+        .references {
+            margin-top: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        footer {
+            background: #1e3c72;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+        }
+        footer p {
+            margin: 10px 0;
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌙 Protocolo de Descanso Circadiano</h1>
+            <p class="subtitle">Para trabajadores nocturnos basado en evidencia científica</p>
+        </header>
+
+        <section class="profile-section">
+            <h2>Tu Perfil</h2>
+            <div class="profile-info">
+                <div class="info-card">
+                    <span class="label">Horario de trabajo:</span>
+                    <span class="value">23:00 - 07:00 hrs (L-V)</span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Edad:</span>
+                    <span class="value">50 años</span>
+                </div>
+                <div class="info-card">
+                    <span class="label">Tipo de turno:</span>
+                    <span class="value">Nocturno permanente</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="protocol-section">
+            <h2>📋 Protocolo Diario (Lunes - Viernes)</h2>
+
+            <div class="time-block critical">
+                <div class="time">07:00 - 07:30</div>
+                <div class="activity">
+                    <h4>🕶️ Regreso a casa con protección</h4>
+                    <ul>
+                        <li><strong>Gafas de sol oscuras</strong> (bloquean luz azul)</li>
+                        <li>Evitar exposición solar directa</li>
+                        <li>Ruta más oscura posible</li>
+                    </ul>
+                    <div class="evidence">📚 Evidencia: La luz matutina resetea el reloj circadiano en dirección opuesta a tu horario nocturno</div>
+                </div>
+            </div>
+
+            <div class="time-block">
+                <div class="time">07:30 - 08:00</div>
+                <div class="activity">
+                    <h4>🍽️ Comida post-turno ligera</h4>
+                    <ul>
+                        <li>Proteína ligera + carbohidratos complejos</li>
+                        <li>Evitar: cafeína, azúcares, comidas pesadas</li>
+                        <li>Ejemplos: Yogurt + avena, huevo + pan integral</li>
+                    </ul>
+                    <div class="evidence">📚 Evidencia: Comer pesado antes de dormir aumenta inflamación y dificulta el sueño</div>
+                </div>
+            </div>
+
+            <div class="time-block critical">
+                <div class="time">08:00 - 08:30</div>
+                <div class="activity">
+                    <h4>🛁 Rutina pre-sueño</h4>
+                    <ul>
+                        <li>Ducha tibia (baja temperatura corporal)</li>
+                        <li>Luz roja/ámbar únicamente</li>
+                        <li>Temperatura habitación: 16-19°C</li>
+                        <li><strong>Suplementos:</strong>
+                            <ul>
+                                <li>Melatonina 1-3mg</li>
+                                <li>Magnesio 200-400mg</li>
+                                <li>L-Teanina 200mg (opcional)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="evidence">📚 Evidencia: Melatonina ayuda a sincronizar el sueño en trabajadores nocturnos</div>
+                </div>
+            </div>
+
+            <div class="time-block sleep">
+                <div class="time">08:30 - 16:30</div>
+                <div class="activity">
+                    <h4>😴 SUEÑO PRINCIPAL (8 horas)</h4>
+                    <ul>
+                        <li><strong>Oscuridad total:</strong> Cortinas blackout + máscara</li>
+                        <li><strong>Silencio:</strong> Tapones de oídos, ruido blanco</li>
+                        <li><strong>Temperatura:</strong> 16-19°C constante</li>
+                        <li>Modo avión en celular</li>
+                        <li>Letrero "NO MOLESTAR"</li>
+                    </ul>
+                    <div class="evidence">📚 CRÍTICO: 8 horas de sueño de calidad reducen riesgo cardiovascular y metabólico en trabajadores nocturnos 50+</div>
+                </div>
+            </div>
+
+            <div class="time-block">
+                <div class="time">16:30 - 17:00</div>
+                <div class="activity">
+                    <h4>☀️ Despertar gradual</h4>
+                    <ul>
+                        <li>Luz gradual (lámpara simuladora)</li>
+                        <li>Estiramiento 5-10 min</li>
+                        <li>Hidratación: 500ml agua</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="time-block">
+                <div class="time">17:00 - 18:00</div>
+                <div class="activity">
+                    <h4>🥗 Comida principal del día</h4>
+                    <ul>
+                        <li>Proteína + vegetales + grasas saludables</li>
+                        <li>Antioxidantes (frutas, verduras)</li>
+                        <li>Evitar: procesados, azúcar excesivo</li>
+                    </ul>
+                    <div class="evidence">📚 Evidencia: Antioxidantes mitigan daño oxidativo del trabajo nocturno</div>
+                </div>
+            </div>
+
+            <div class="time-block critical">
+                <div class="time">18:00 - 19:00</div>
+                <div class="activity">
+                    <h4>🏃 Ejercicio moderado</h4>
+                    <ul>
+                        <li>Cardio moderado: 30-40 min</li>
+                        <li>Fuerza: 2-3 veces/semana</li>
+                        <li><strong>Preferencia:</strong> Al aire libre con luz natural</li>
+                    </ul>
+                    <div class="evidence">📚 Evidencia: Ejercicio vespertino mantiene ritmo circadiano y mejora sensibilidad a insulina</div>
+                </div>
+            </div>
+
+            <div class="time-block">
+                <div class="time">19:00 - 21:00</div>
+                <div class="activity">
+                    <h4>👥 Tiempo social/personal</h4>
+                    <ul>
+                        <li>Actividades con familia</li>
+                        <li>Luz ambiental normal</li>
+                        <li>Comida ligera si necesario</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="time-block">
+                <div class="time">21:00 - 22:30</div>
+                <div class="activity">
+                    <h4>🔆 Preparación turno nocturno</h4>
+                    <ul>
+                        <li>Snack ligero (frutos secos, fruta)</li>
+                        <li><strong>Aumentar luz brillante</strong></li>
+                        <li>Preparar comidas para turno</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="time-block work">
+                <div class="time">23:00 - 07:00</div>
+                <div class="activity">
+                    <h4>💼 TURNO DE TRABAJO</h4>
+                    <ul>
+                        <li><strong>Luz brillante (>1000 lux)</strong> especialmente 23:00-03:00</li>
+                        <li><strong>Cafeína estratégica:</strong>
+                            <ul>
+                                <li>23:00-24:00: Primera dosis</li>
+                                <li>02:00-03:00: Segunda dosis (opcional)</li>
+                                <li>❌ NO después de 03:00</li>
+                            </ul>
+                        </li>
+                        <li><strong>Alimentación:</strong>
+                            <ul>
+                                <li>01:00: Comida ligera (proteína + vegetales)</li>
+                                <li>Evitar: comidas pesadas, azúcar</li>
+                            </ul>
+                        </li>
+                        <li>Levantarse cada 60-90 min</li>
+                    </ul>
+                    <div class="evidence">📚 Evidencia: Luz brillante mejora alerta y mantiene ritmo circadiano invertido</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>💊 Suplementos Basados en Evidencia</h2>
+            <div class="supplement-grid">
+                <div class="supplement-card essential">
+                    <h4>Esenciales</h4>
+                    <ul>
+                        <li><strong>Melatonina:</strong> 1-3mg, 30 min antes dormir</li>
+                        <li><strong>Vitamina D3:</strong> 2000-4000 IU diarias</li>
+                        <li><strong>Magnesio:</strong> 200-400mg nocturno</li>
+                        <li><strong>Omega-3:</strong> 1-2g diarios</li>
+                    </ul>
+                </div>
+                <div class="supplement-card optional">
+                    <h4>Opcionales</h4>
+                    <ul>
+                        <li><strong>NAC:</strong> 600mg/día (antioxidante)</li>
+                        <li><strong>Taurina:</strong> 1-2g (neuroprotección)</li>
+                        <li><strong>L-Teanina:</strong> 200mg pre-sueño</li>
+                        <li><strong>B Complex:</strong> Matutino</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="warning">⚠️ Consultar con médico antes de iniciar suplementación</div>
+        </section>
+
+        <section>
+            <h2>⚠️ Riesgos a Mitigar (50+ años)</h2>
+            <div class="risk-grid">
+                <div class="risk-card">
+                    <h4>🫀 Cardiovascular</h4>
+                    <p><strong>Riesgo:</strong> +40% enfermedad CV</p>
+                    <p><strong>Mitigación:</strong></p>
+                    <ul>
+                        <li>Ejercicio regular 5x/semana</li>
+                        <li>Control presión arterial</li>
+                        <li>Omega-3, CoQ10</li>
+                        <li>Dieta antiinflamatoria</li>
+                    </ul>
+                </div>
+                <div class="risk-card">
+                    <h4>🍬 Metabólico</h4>
+                    <p><strong>Riesgo:</strong> Diabetes tipo 2</p>
+                    <p><strong>Mitigación:</strong></p>
+                    <ul>
+                        <li>Control glucosa trimestral</li>
+                        <li>Evitar azúcares en turno</li>
+                        <li>Ejercicio post-sueño</li>
+                        <li>Ayuno intermitente moderado</li>
+                    </ul>
+                </div>
+                <div class="risk-card">
+                    <h4>🧠 Cognitivo</h4>
+                    <p><strong>Riesgo:</strong> Deterioro acelerado</p>
+                    <p><strong>Mitigación:</strong></p>
+                    <ul>
+                        <li>Sueño de calidad (prioridad #1)</li>
+                        <li>Omega-3 DHA</li>
+                        <li>Estimulación cognitiva</li>
+                        <li>Control estrés</li>
+                    </ul>
+                </div>
+                <div class="risk-card">
+                    <h4>😔 Mental</h4>
+                    <p><strong>Riesgo:</strong> Depresión, ansiedad</p>
+                    <p><strong>Mitigación:</strong></p>
+                    <ul>
+                        <li>Luz natural vespertina</li>
+                        <li>Contacto social</li>
+                        <li>Ejercicio</li>
+                        <li>Terapia si necesario</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>🛠️ Equipamiento Recomendado</h2>
+            <div class="equipment-grid">
+                <div class="equipment-item priority-high">
+                    <h4>Prioridad Alta</h4>
+                    <ul>
+                        <li>Cortinas blackout</li>
+                        <li>Máscara de ojos</li>
+                        <li>Tapones de oídos</li>
+                        <li>Gafas anti luz azul</li>
+                        <li>Termómetro habitación</li>
+                    </ul>
+                </div>
+                <div class="equipment-item priority-medium">
+                    <h4>Prioridad Media</h4>
+                    <ul>
+                        <li>Lámpara 10,000 lux</li>
+                        <li>Bombillas ámbar/rojas</li>
+                        <li>Aire acondicionado</li>
+                        <li>Humidificador</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>📚 Fundamento Científico</h2>
+            <div class="science-content">
+                <ul class="science-list">
+                    <li><strong>Cronobiología:</strong> El núcleo supraquiasmático regula el ritmo circadiano mediante luz. Trabajadores nocturnos experimentan desincronización.</li>
+                    <li><strong>Melatonina:</strong> Exposición a luz inhibe producción. Suplementación ayuda a recalibrar ciclo sueño-vigilia.</li>
+                    <li><strong>Luz brillante:</strong> >1000 lux durante turno mejora alerta y desplaza ritmo circadiano.</li>
+                    <li><strong>Edad 50+:</strong> Reducción natural de melatonina. Mayor vulnerabilidad y riesgo cardiovascular/metabólico.</li>
+                    <li><strong>Ejercicio:</strong> Actividad vespertina facilita adaptación y mejora sensibilidad a insulina.</li>
+                </ul>
+                <div class="references">
+                    <h4>Referencias:</h4>
+                    <ul>
+                        <li>Kecklund & Axelsson (2016). Health consequences of shift work</li>
+                        <li>Wright et al. (2013). Influence of sleep deprivation on metabolic function</li>
+                        <li>Vetter et al. (2018). Association between rotating night shift work and CVD</li>
+                        <li>Dumont & Beaulieu (2007). Light exposure in sleep disorders</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>⚕️ Este protocolo es informativo. Consulta con médico especialista en medicina del sueño.</p>
+            <p>Versión 1.0 - Basado en evidencia científica 2024-2025</p>
+        </footer>
+    </div>
+</body>
+</html>
