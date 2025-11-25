@@ -1,0 +1,39 @@
+# Core dependencies
+anthropic>=0.18.0
+python-dotenv>=1.0.0
+
+# Database
+sqlalchemy>=2.0.0
+
+# Document generation
+python-docx>=1.1.0
+reportlab>=4.0.0
+
+# Web scraping (for legal sources)
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+
+# Natural Language Processing
+nltk>=3.8.0
+textblob>=0.17.0
+
+# Date handling
+python-dateutil>=2.8.0
+
+# CLI enhancement
+rich>=13.7.0
+prompt-toolkit>=3.0.43
+
+# PDF generation
+fpdf2>=2.7.0
+
+# JSON handling
+pydantic>=2.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Utilities
+colorama>=0.4.6
+tabulate>=0.9.0
