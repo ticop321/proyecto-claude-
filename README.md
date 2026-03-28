@@ -1,175 +1,109 @@
-# 🎓 Asistente Legal Penal Español
+# Editor Pro Max
 
-Sistema experto de asistencia jurídica en Derecho Penal Español, basado en inteligencia artificial, que simula un abogado penalista senior con 20+ años de experiencia.
-
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
-![Python](https://img.shields.io/badge/python-3.8+-green)
-![License](https://img.shields.io/badge/license-Educational-orange)
+AI-powered video editor built with [Remotion](https://www.remotion.dev/) and Claude Code — by [@soyenriquerocha](https://github.com/soyenriquerocha).
 
 ---
 
-## 📋 Índice
+## Requisitos
 
-- [Características](#características)
-- [Instalación](#instalación)
-- [Uso](#uso)
-- [Arquitectura](#arquitectura)
-- [Módulos](#módulos)
-- [Limitaciones y Advertencias](#limitaciones-y-advertencias)
-- [Licencia](#licencia)
+- Node.js 18+
+- npm
 
----
-
-## ✨ Características
-
-### 🔍 Análisis de Casos Penales
-
-- **Identificación automática de tipos penales** a partir de descripción de hechos
-- **Análisis de elementos objetivos y subjetivos** del delito
-- **Detección de circunstancias modificativas** (atenuantes, agravantes, eximentes)
-- **Cálculo estimado de penas** según el Código Penal
-- **Verificación de prescripción** del delito y de la pena
-- **Calificación jurídica fundamentada** con citas legales
-
-### 📝 Redacción de Documentos Legales
-
-Generación automática de:
-- Querellas criminales
-- Denuncias
-- Recursos de apelación y casación
-- Escritos de defensa
-- Informes jurídicos
-
-### 📚 Base de Conocimiento Legal
-
-- **Código Penal completo** (LO 10/1995 actualizado 2024)
-- **LECrim** (Procedimientos, recursos, plazos)
-- **Jurisprudencia** (TS y TC con doctrina consolidada)
-
-### 🧠 Inteligencia Emocional
-
-- Detección automática de estado emocional
-- Adaptación del tono de respuesta
-- Derivación a recursos de emergencia (024, 016, 112)
-
-### 🎯 Asesoramiento Estratégico
-
-- Análisis FODA
-- Recomendaciones de defensa y acusación
-- Evaluación de riesgos procesales
-
----
-
-## 🚀 Instalación
+## Instalación
 
 ```bash
-# Clonar repositorio
-git clone https://github.com/tu-usuario/proyecto-claude-.git
-cd proyecto-claude-
-
-# Crear entorno virtual
-python -m venv venv
-source venv/bin/activate  # Windows: venv\\Scripts\\activate
-
 # Instalar dependencias
-pip install -r requirements.txt
-
-# Ejecutar
-python main.py
+npm install --ignore-scripts
 ```
 
----
+> `--ignore-scripts` evita que módulos nativos intenten descargar binarios CUDA, que fallan en entornos sin GPU.
 
-## 📖 Uso
+## Uso
 
-### Menú Principal
+```bash
+# Iniciar Remotion Studio (preview en tiempo real)
+npm run dev
+# → http://localhost:3000
 
-```
-1. 📋 Analizar un caso penal
-2. 📝 Redactar documento legal
-3. 📚 Consultar normativa (Código Penal, LECrim)
-4. ⚖️  Consultar jurisprudencia
-5. 📖 Explicar concepto legal
-6. 🎯 Asesoramiento estratégico
-7. 📊 Ver historial de casos
-8. ⚙️  Configuración y preferencias
-```
+# Verificar TypeScript
+npm run typecheck
 
-### Ejemplo: Analizar Caso
+# Renderizar un video
+npx remotion render <composition-id> out/video.mp4
 
-1. Seleccionar opción 1
-2. Describir los hechos
-3. El sistema:
-   - Detecta estado emocional
-   - Identifica tipos penales
-   - Analiza elementos del delito
-   - Calcula penas
-   - Genera fundamentación jurídica
+# Renderizar para una plataforma
+./scripts/render.sh TikTok tiktok
+./scripts/render.sh Presentation youtube
 
----
-
-## 🏗️ Arquitectura
-
-```
-proyecto-claude-/
-├── main.py                    # CLI principal
-├── knowledge/                 # Base legal (CP, LECrim, Jurisprudencia)
-├── analysis/                  # Análisis de casos y razonamiento
-├── drafting/                  # Generación de documentos
-├── emotional/                 # Inteligencia emocional
-├── learning/                  # Perfiles y aprendizaje adaptativo
-└── sources/                   # Verificación de fuentes
+# Renderizar para múltiples plataformas
+./scripts/batch-render.sh TalkingHeadEdit youtube tiktok instagram_reel
 ```
 
----
+## Composiciones disponibles
 
-## ⚠️ Limitaciones y Advertencias
+| ID | Dimensiones | Descripción |
+|----|-------------|-------------|
+| `Showcase` | 1920×1080 | Demo de componentes |
+| `TikTok` | 1080×1920 | Video vertical corto |
+| `InstagramReel` | 1080×1920 | Reel de Instagram |
+| `YouTubeShort` | 1080×1920 | YouTube Short |
+| `Presentation` | 1920×1080 | Presentación con slides |
+| `Testimonial` | 1920×1080 | Cita con autor |
+| `Announcement` | 1920×1080 | Video de anuncio |
+| `BeforeAfter` | 1920×1080 | Comparativa antes/después |
+| `TalkingHeadEdit` | 1920×1080 | Talking head con captions y silence removal |
+| `PodcastClip` | 1080×1920 | Clip vertical de podcast |
 
-### Disclaimer Legal
+## Pipeline de edición de video
 
-**⚠️ IMPORTANTE:**
+```bash
+# 1. Analizar video (extrae metadata)
+npx tsx scripts/analyze-video.ts public/assets/video.mp4
 
-Este sistema es una herramienta de asesoramiento orientativo basada en IA. **NO sustituye el asesoramiento de un abogado colegiado.**
+# 2. Detectar silencios
+npx tsx scripts/detect-silence.ts public/assets/video.mp4
 
-- La información es orientativa, no constituye asesoramiento legal oficial
-- Para casos reales, consulte siempre con un profesional del derecho
-- Los documentos generados son plantillas que deben ser revisadas por un letrado
+# 3. Extraer audio para transcripción
+npx tsx scripts/extract-audio.ts public/assets/video.mp4
 
-### Recursos de Emergencia
+# 4. Transcribir con Whisper.cpp
+npx tsx scripts/transcribe.ts
 
-- **024** - Atención conducta suicida
-- **016** - Violencia de género
-- **112** - Emergencias generales
-- **Turno de oficio:** Colegio de Abogados de su ciudad
+# 5. Eliminar fondo de imagen con IA
+npx tsx scripts/remove-bg.ts public/assets/photo.jpg
+```
 
----
+## Estructura del proyecto
 
-## 📜 Licencia
+```
+src/
+  Root.tsx                    # Registra las 10 composiciones
+  compositions/               # Composiciones de demostración
+  components/
+    backgrounds/              # GradientBackground, ParticleField, GridPattern
+    layout/                   # SafeArea, SplitScreen, PictureInPicture
+    media/                    # FitVideo, FitImage, VideoClip, JumpCut, Slideshow
+    overlays/                 # CallToAction, ProgressBar, Watermark, CountdownTimer
+    text/                     # AnimatedTitle, CaptionOverlay, LowerThird, TypewriterText
+  templates/
+    social/                   # TikTokVideo, InstagramReel, YouTubeShort
+    content/                  # Presentation, Testimonial
+    promo/                    # Announcement, BeforeAfter
+    editing/                  # TalkingHeadEdit, PodcastClip
+  hooks/                      # useAnimation, useCaptions, useColorScheme...
+  presets/                    # colors, dimensions, fonts, easings, brand
+  utils/                      # editing, math
 
-Proyecto educativo y de código abierto.
+scripts/
+  analyze-video.ts            # Metadata ffprobe → public/video-metadata.json
+  detect-silence.ts           # Silencedetect → public/silence.json
+  extract-audio.ts            # Extrae WAV 16kHz → public/assets/audio.wav
+  transcribe.ts               # Whisper.cpp → public/captions.json
+  remove-bg.ts                # Elimina fondo con IA
+  render.sh                   # Renderiza para una plataforma
+  batch-render.sh             # Renderiza para múltiples plataformas
+```
 
-**Uso permitido:** Fines educativos, investigación académica, desarrollo personal
+## Licencia
 
-**Restricciones:** No usar como único asesoramiento en casos reales sin validación legal profesional
-
----
-
-## 📞 Contacto y Fuentes
-
-### Fuentes Oficiales
-
-- **BOE:** https://www.boe.es
-- **CENDOJ:** https://www.poderjudicial.es
-- **Tribunal Constitucional:** https://www.tribunalconstitucional.es
-
----
-
-<div align="center">
-
-**Asistente Legal Penal Español v1.0.0**
-
-*Derecho Penal al alcance de todos*
-
-⚖️ 📚 🎓
-
-</div>
+MIT — Copyright (c) 2026 Enrique Rocha (@soyenriquerocha)
