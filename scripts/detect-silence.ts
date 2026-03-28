@@ -19,6 +19,16 @@ if (!inputPath) {
   process.exit(1);
 }
 
+// Validate parameters to prevent command injection
+if (!/^-?\d+(\.\d+)?dB$/.test(noiseDb)) {
+  console.error(`Invalid noise-db value: "${noiseDb}". Expected format: -30dB`);
+  process.exit(1);
+}
+if (!/^\d+(\.\d+)?$/.test(minDuration)) {
+  console.error(`Invalid min-duration value: "${minDuration}". Expected a number like 0.5`);
+  process.exit(1);
+}
+
 console.log(`Detecting silence in: ${inputPath}`);
 console.log(`  Noise threshold: ${noiseDb}`);
 console.log(`  Min silence duration: ${minDuration}s`);

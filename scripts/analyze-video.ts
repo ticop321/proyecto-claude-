@@ -29,7 +29,12 @@ const metadata = {
   width: videoStream?.width || 0,
   height: videoStream?.height || 0,
   fps: videoStream?.r_frame_rate
-    ? eval(videoStream.r_frame_rate)
+    ? (() => {
+        const parts = videoStream.r_frame_rate.split("/");
+        return parts.length === 2
+          ? parseFloat(parts[0]) / parseFloat(parts[1])
+          : parseFloat(parts[0]);
+      })()
     : 30,
   videoCodec: videoStream?.codec_name || "unknown",
   audioCodec: audioStream?.codec_name || "none",

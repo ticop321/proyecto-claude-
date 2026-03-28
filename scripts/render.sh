@@ -44,14 +44,13 @@ echo "Platform: ${PLATFORM}"
 echo "Output: ${OUTPUT_FILE}"
 echo ""
 
-CMD="npx remotion render ${COMP_ID} ${OUTPUT_FILE}"
-
 if [ -n "$WIDTH" ]; then
-  CMD="${CMD} --width ${WIDTH} --height ${HEIGHT}"
+  echo "Running: npx remotion render ${COMP_ID} ${OUTPUT_FILE} --width ${WIDTH} --height ${HEIGHT}"
+  npx remotion render "${COMP_ID}" "${OUTPUT_FILE}" --width "${WIDTH}" --height "${HEIGHT}"
+else
+  echo "Running: npx remotion render ${COMP_ID} ${OUTPUT_FILE}"
+  npx remotion render "${COMP_ID}" "${OUTPUT_FILE}"
 fi
-
-echo "Running: ${CMD}"
-eval $CMD
 
 echo ""
 echo "Done! Output: ${OUTPUT_FILE}"
