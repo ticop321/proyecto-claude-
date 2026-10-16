@@ -59,11 +59,15 @@ NAVEGADOR = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML
 
 PLAN_B = """\
 YouTube ha bloqueado la petición (suele pasar desde servidores en la nube).
-Plan B, gratis y siempre funciona:
-  1. Abre el vídeo en YouTube (en el ordenador).
-  2. Debajo del vídeo, pulsa «...más» y luego «Mostrar transcripción».
-  3. Selecciona todo el texto de la transcripción, cópialo y pégalo en el chat.
-Con eso se sigue exactamente igual."""
+Plan B, gratis (elige uno):
+  A. Una web de transcripciones, desde el navegador del móvil o del ordenador:
+     abre youtubetotranscript.com o tactiq.io/tools/youtube-transcript, pega el
+     enlace del vídeo, pulsa el botón para generar y copia el texto.
+  B. En el ordenador, en YouTube: debajo del vídeo pulsa «...más» y luego
+     «Mostrar transcripción»; selecciona el texto con el ratón y cópialo.
+     (En la app del móvil no se puede copiar.)
+  C. Si Claude tiene acceso a tu Chrome, que abra el vídeo y lea la transcripción.
+Pega el texto en el chat y se sigue exactamente igual."""
 
 
 class Bloqueado(Exception):

@@ -49,10 +49,16 @@ peticiones: solo empeora el bloqueo. Si tienes una herramienta de navegador
 conectada al Chrome del usuario, puedes abrir el vídeo con él presente y
 copiar la transcripción. Si no, pide el **plan B**, que siempre funciona:
 
-> YouTube no me deja leer el vídeo desde aquí. Hazlo tú en 20 segundos:
-> 1. Abre el vídeo en YouTube en el ordenador.
-> 2. Debajo del vídeo pulsa «...más» y después «Mostrar transcripción».
-> 3. Selecciona todo el texto de la transcripción, cópialo y pégamelo aquí.
+> YouTube no me deja leer el vídeo desde aquí. Elige la forma más cómoda (todas gratis):
+> - **Desde el móvil o el ordenador:** abre youtubetotranscript.com o
+>   tactiq.io/tools/youtube-transcript, pega el enlace, genera la
+>   transcripción y cópiamela aquí.
+> - **Desde el ordenador, en YouTube:** debajo del vídeo pulsa «...más» →
+>   «Mostrar transcripción», selecciona el texto con el ratón y cópialo.
+>   En la app del móvil YouTube no deja copiarlo.
+
+Esas webs son servicios de terceros: el usuario les da el enlace del vídeo,
+nada más. Si una no funciona, que pruebe la otra.
 
 Cuando lo pegue, guárdalo en un archivo y límpialo:
 
