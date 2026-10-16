@@ -201,7 +201,14 @@ def limpiar_pegado(texto):
     """
     segs, actual = [], None
     for linea in (l.strip() for l in texto.splitlines()):
-        if not linea:
+        if not linea or linea.startswith("#"):        # cabeceras de webs como tactiq.io
+            continue
+        # Formato con la marca en la misma línea: «00:01:02.399 texto» (tactiq.io y similares)
+        m = re.match(r"\[?(?:(\d+):)?(\d{1,2}):(\d{2})(?:[.,]\d+)?\]?\s+(.+)", linea)
+        if m:
+            h, mi, s, resto = m.groups()
+            actual = {"inicio": int(h or 0) * 3600 + int(mi) * 60 + int(s), "texto": resto.strip()}
+            segs.append(actual)
             continue
         m = re.fullmatch(r"(?:(\d+):)?(\d{1,2}):(\d{2})", linea)
         if m:
